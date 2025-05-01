@@ -1,0 +1,173 @@
+## Installation
+
+### Prerequisites
+
+- **OS**: Linux/macOS/Windows 10+  
+- **Python**: 3.8–3.11  
+- **CUDA** (optional, for GPU): 10.2 / 11.x  
+- **Git**: ≥2.20  
+
+---
+
+### 1. Clone & Enter
+
+```bash
+git clone git@github.com:<your-org>/camouflage-object-detection.git
+cd camouflage-object-detection
+```
+
+### 2. Create & Activate Env
+
+#### Option A: `venv` (lightweight)
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate    # Linux/macOS
+.venv\Scripts\activate       # Windows PowerShell
+```
+
+#### Option B: Conda (if you prefer)
+
+```bash
+conda create -n camo-det python=3.9 -y
+conda activate camo-det
+```
+
+---
+
+### 3. Install Core Dependencies
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+If you’re using Conda, you might instead maintain an `environment.yml` and run:
+
+```bash
+conda env update -f environment.yml
+```
+
+---
+
+### 4. (Optional) GPU / CUDA
+
+If you have an NVIDIA GPU, install the matching PyTorch build:
+
+```bash
+# Check your CUDA version at https://pytorch.org/get-started/locally/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu11X
+```
+
+Verify:
+
+```bash
+python - <<EOF
+import torch
+print("CUDA available:", torch.cuda.is_available())
+EOF
+```
+
+---
+
+### 5. Download / Link Datasets
+
+Place or symlink your datasets under `data/`:
+
+```
+camouflage-object-detection/
+└── data/
+    ├── CAMO/
+    └── PASCALVOC/
+```
+
+You can organize raw vs. processed:
+
+```
+data/raw/CAMO/
+data/processed/CAMO-saliency/
+```
+
+---
+
+### 6. Config & Environment Variables
+
+Copy the template config and edit paths:
+
+```bash
+cp config/example.yaml config/local.yaml
+```
+
+In `config/local.yaml` set:
+```yaml
+dataset:
+  name: CAMO
+  raw_dir: data/raw/CAMO
+  saliency_dir: data/processed/CAMO-saliency
+training:
+  batch_size: 8
+  epochs: 50
+  learning_rate: 1e-4
+```
+
+If you need secrets or API keys, use a `.env` file:
+
+```bash
+cp .env.example .env
+# then edit .env
+```
+
+---
+
+### 7. Initialize & Test
+
+```bash
+# Initialize any git submodules
+git submodule update --init --recursive
+
+# Run quick smoke test
+python - <<EOF
+from src.model.saliency import generate_saliency_map
+print("Saliency function loaded:", callable(generate_saliency_map))
+EOF
+```
+
+---
+
+### 8. Run Unit Tests
+
+```bash
+pytest --maxfail=1 --disable-warnings -q
+```
+
+Add a badge to your README to show `[![pytest](https://github.com/.../actions/workflows/ci.yml/badge.svg)](...)`
+
+---
+
+### 9. (Optional) Docker
+
+Use our provided `Dockerfile` to containerize:
+
+```bash
+# Build image
+docker build -t camo-det:latest .
+
+# Run interactive shell
+docker run --gpus all -it --rm \
+  -v "$PWD":/workspace \
+  camo-det:latest bash
+```
+
+---
+
+### 10. Lint & Format (Code Quality)
+
+```bash
+# Black for formatting
+black .
+
+# Flake8 for style
+flake8 src/ tests/
+
+# Pre-commit hooks
+pre-commit install
