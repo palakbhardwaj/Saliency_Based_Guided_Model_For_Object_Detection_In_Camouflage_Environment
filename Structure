@@ -1,0 +1,27 @@
+camouflage-object-detection/
+├── .github/                        
+│   ├── ISSUE_TEMPLATE/            
+│   └── workflows/                 
+├── code_files/                     # all your Jupyter notebooks
+│   ├── CNN_Transferlearning.ipynb
+│   ├── Fasterrcnn_comparsion_CAMO.ipynb
+│   ├── Fasterrcnn_comparsion_PASCALVOC.ipynb
+│   ├── fasterrcnn_vgg16_diff-Learningrates.ipynb
+│   ├── fasterrcnn_with_saliency_CAMO.ipynb
+│   ├── fasterrcnn_with_saliency_PASCALVOC.ipynb
+│   ├── fasterrcnn_without_saliency_CAMO.ipynb
+│   ├── fasterrcnn_without_saliency_PASCALVOC.ipynb
+│   ├── SSD_with_saliency_CAMO.ipynb
+│   ├── SSD_without_saliency_CAMO.ipynb
+│   ├── Training_Rcnn.ipynb
+│   └── YOLO_with_and_without_saliency_CAMO.ipynb
+├── data/                           # raw & processed datasets
+├── src/                            # reusable utility modules
+│   └── utils/                     
+├── tests/                          # unit tests
+├── docs/                           # design docs, diagrams
+├── demos/                          # 5-min video demo
+│   └── demo.mp4                   
+├── README.md                       # project overview + Installation
+├── INSTALLATION.md                 # (optional) full install guide
+└── requirements.txt                # pinned dependencies
